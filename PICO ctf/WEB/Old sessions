@@ -1,0 +1,36 @@
+Old Sessions:-
+
+1. We will register an account in the website and then login.
+2. we can see the comments. In that one comments mentions something about /sessions
+3. when we add /sessions to the url we get directed to a page at sessions
+4. There we can see the cookie value for admin.
+5. paste the value in the cookie section request.
+
+
+
+Now what is /sessions mentioned in the challenge?
+
+	The /sessions endpoint is a debug route left exposed in the Flask app. When any authenticated user requests it, it returns a JSON dump of all active sessions — each entry contains the session token (cookie value) and the user key it's associated with.
+It's essentially an internal admin/debug tool that was never removed before the challenge went live. In a real app this would be a critical information disclosure vulnerability — it lets any logged-in user enumerate and steal other users' session tokens, enabling trivial session hijacking.
+
+
+
+What is debug route?
+
+	A debug route is a URL endpoint that a developer adds to their application for testing and troubleshooting during development. It exposes internal state — like active sessions, database contents, environment variables, or application logs — so the developer can inspect what's happening "under the hood."
+
+	For example, a developer might add a /debug/sessions route during development to quickly see which users are logged in, or a /debug/config route to verify environment settings.
+
+	These routes are meant to be removed before the app goes to production, because they expose sensitive internal information. In the challenge, the developer forgot to remove /sessions, leaving it accessible to any logged-in user — which is the entire vulnerability.
+
+	In short: it's a "leftover tool" from development that shouldn't exist in a live application.
+	
+
+
+What is mean by cookie and its value?
+	
+	Cookie — a small piece of data the server sends to your browser and your browser automatically attaches to every request you make back to that server.  In this challenge, the cookie is named session.
+	
+	Cookie value — the actual data stored inside that cookie.  In this case, it's a long random string (the session token/ID) that the server uses to look up who you are in its session store.
+	
+	In short: the cookie is the container, and the value is the key that unlocks your identity on the server. 

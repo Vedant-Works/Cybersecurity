@@ -1,0 +1,16 @@
+1. When we try to login it gives invalid credentials so will check the source code of the webpage
+2. There is a text in comments. we will use ROT13 for that.
+3. We see that there is a need to add header in the request, so for that we will use burpsuite.
+4. open browser in burpsuite (make sure intercept is off) then enter the url of the website and use the email mentioned in the challenge.
+5. before login turn on the intercept and then try any password and login. In burpsuite request add one line: 'X-Dev-Access: yes' and then forward it.
+6. open the browser you will see the flag
+
+
+
+What is HTTP header?
+
+	A small piece of metadata that travels with every web request (or response) between your browser and the server. Think of it like a shipping label on a package.  The package is the actual data (the form fields: email + password). The label tells the receiver extra context: who sent it, what format the contents are in, where it came from, etc.
+	
+	Headers are just key-value pairs you can add to any HTTP request. They're not visible in the URL or the form fields — they're invisible metadata. That's exactly what made this a security bug: the developer treated a client-controlled header as a trusted authentication signal.
+	
+	The server's code checks: "Is X-Dev-Access present and equal to yes?" If so → skip password verification entirely. Since anyone can add arbitrary headers to their request (browsers, cURL, Burp, etc.), the "secret" was trivially exploitable.
